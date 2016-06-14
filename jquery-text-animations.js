@@ -60,8 +60,10 @@ var bubbleHTML = function(o) {
         return '<span data-bubblehtml="new">' + x + '</span>';
     }) + __.innerHTML;
 
-    // speed for each animation's step
-    var speed = (o.speed || 2000) / (oldTable.length + newTable.length);
+    // mark old spans to be removed
+    for (var i = 0, l = oldTable.length; i < l; i++) {
+        $$.find('[data-bubblehtml="old' + oldTable[i].index + '"]').attr('data-bubblehtml-action', 'remove');
+    }
 
     // force spans to be aligned as normal text
     var spans = $$.find('span').each(function() {
@@ -74,46 +76,74 @@ var bubbleHTML = function(o) {
         }
     });
 
+    // speed for each animation's step
+    var totalAnimations = spans.length;
+    var speed = (o.speed || 2000) / totalAnimations;
+
+    // Rule when it should add (false||0) or remove (true||1) letters
+    var turn = 1,
+        animationsDone = 0;
+
     // start animations
     (animate = function(newTableIndex) {
-        var properties = newTable[newTableIndex];
         var element = spans.eq(newTableIndex);
-        if (!element.length) {
+
+        if (animationsDone == totalAnimations) {
             spans.each(function() {
                 $(this).replaceWith(this.innerHTML);
             });
-            if (o.callback instanceof Function) {
-                o.callback();
-            }
-            console.log('bubbleHTML: ' + o.newText);
+            o.callback instanceof Function && o.callback();
             return;
         }
 
-        var width = +element.attr('data-bubblehtml');
+        // function to trigger next animation
         var nextAnimation = function() {
-            animate(newTableIndex + 1);
+            animationsDone++;
+            animate(newTableIndex + turn);
         };
 
-        if (width) {
-            element.animate({ width: width }, speed, nextAnimation);
-
-            if (~properties.old) {
-                var span = $$.find('[data-bubblehtml=old' + properties.old + ']');
-                if (span.length) {
-                    span.animate({ width: 0 }, speed, function() {
-                        span.remove();
-                    });
-                }
+        // if it is time to remove
+        if (turn) {
+            turn = 0;
+            var span = $$.find('[data-bubblehtml-action="remove"]:last');
+            if (span.length) {
+                span.animate({ width: 0 }, speed, function() {
+                    $(this).remove();
+                    nextAnimation();
+                });
+            } else {
+                animationsDone--;
+                nextAnimation();
             }
+        }
 
-        } else element.animate({ width: 0 }, speed, function() {
-            element.remove();
-            nextAnimation();
-        });
+        // if it is time to add letter
+        else {
+            turn = 1;
+            var properties = newTable[newTableIndex];
+            var width = +element.attr('data-bubblehtml');
+
+            if (width) {
+                element.animate({ width: width }, speed, nextAnimation);
+
+                if (~properties.old) {
+                    var span = $$.find('[data-bubblehtml=old' + properties.old + ']');
+                    if (span.length) {
+                        span.animate({ width: 0 }, speed, function() {
+                            span.remove();
+                        });
+                    }
+                }
+
+            } else element.animate({ width: 0 }, speed, function() {
+                element.remove();
+                nextAnimation();
+            });
+        }
 
     })(0);
 
 };
 
 var $titulo = $('.titulo');
-bubbleHTML({ element: $titulo, newText: 'Washington Luís Guedes', speed: 5000 });
+bubbleHTML({ element: $titulo, newText: 'Washington Luís Guedes', speed: 5000, callback: function() { console.log('bubbleHTML') } });
