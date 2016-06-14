@@ -23,6 +23,9 @@ var bubbleHTML = function(o) {
         return;
     }
 
+    // height for all spans
+    var height = $$.css('height');
+
     // store properties from each old letter
     var oldTable = [];
     __.innerHTML = __.innerHTML.replace(/./g, function(x, i) {
@@ -62,7 +65,7 @@ var bubbleHTML = function(o) {
 
     // force spans to be aligned as normal text
     var spans = $$.find('span').each(function() {
-        $(this).css({ position: 'relative', display: 'inline-block' });
+        $(this).css({ position: 'relative', display: 'inline-block', height: height, overflow: 'hidden' });
 
         // store new letters width and prepare them to animate
         if ($(this).data('bubblehtml') == 'new') {
