@@ -13,4 +13,4 @@ Use it like:
 
 Thank you for looking into it,
 
-Washington Luís Guedes.
+Guedes, Washington L.
