@@ -1,8 +1,15 @@
-# jquery-wlg-animations
+# jquery-bubble-text
 
-Ready functions for general animations using jQuery:
+This plugin introduces one animated way of changing text.
 
----
+Use it like:
 
-##### 1. bubbleHTML
-Simple animation for text changes.
+    bubbleText({
+        element: $element,        // mandatory, must be one DOM leaf node
+        newText: 'new Text',      // mandatory, must be one string
+        speed: 5000,              // optional, default: 2000
+        callback: function(){}    // optional
+    });
+
+Thank you for looking into it,
+Washington Luís Guedes.
