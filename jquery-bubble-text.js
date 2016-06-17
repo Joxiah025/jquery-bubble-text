@@ -23,14 +23,14 @@ var bubbleText = function(o) {
         return;
     }
 
-    // height for all spans
-    var height = $$.css('height');
-
     // space's width
     var span = $('<span data-bubbletext>w w</span>').prependTo($$);
     var spaceWidth = span.width();
     span.html('w');
     spaceWidth -= 2 * span.width();
+
+    // height for all spans
+    var height = span.css('height');
     span.remove();
 
     // store properties from each old letter
@@ -65,7 +65,7 @@ var bubbleText = function(o) {
             old: oldIndex
         });
 
-        return '<span data-bubbletext="new">' + x + '</span>';
+        return '<span data-bubbletext=new>' + x + '</span>';
     }) + __.innerHTML;
 
     // force spans to be aligned as normal text
@@ -74,8 +74,7 @@ var bubbleText = function(o) {
 
         // store new letters width and prepare them to animate
         if ($(this).data('bubbletext') == 'new') {
-            $(this).attr('data-bubbletext', $(this).width() || spaceWidth);
-            $(this).width(0);
+            $(this).attr('data-bubbletext', $(this).width() || spaceWidth).width(0);
         }
     });
 
