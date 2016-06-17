@@ -2,7 +2,13 @@
 
 This plugin introduces one animated way of changing text.
 
-Use it like:
+You can see it live in [jsfiddle.net](https://jsfiddle.net/amf6ktpy/).
+
+---
+
+#### How to use it
+
+It is really simple, just follow this syntax:
 
     bubbleText({
         element: $element,        // mandatory, must be one DOM leaf node
@@ -11,6 +17,8 @@ Use it like:
         callback: function(){}    // optional
     });
 
-Thank you for looking into it,
+---
+
+Thanks for visiting,
 
 Guedes, Washington L.
