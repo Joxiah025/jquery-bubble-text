@@ -2,13 +2,16 @@
 
 This plugin introduces one animated way of changing text.
 
-You can see it live in [jsfiddle.net](https://jsfiddle.net/amf6ktpy/).
+Below you can see use cases:
+
+1. Fading letters. [(Example)](https://jsfiddle.net/5c5bkkgu/)
+2. Looping phrases. [(Example)](https://jsfiddle.net/amf6ktpy/)
+
+<sup>Thanks [_jsfiddle.net_](https://jsfiddle.net/)</sup>
 
 ---
 
-#### How to use it
-
-It is really simple, just follow this syntax:
+### Syntax
 
     bubbleText({
         element: $element,        // mandatory, must be one DOM leaf node
