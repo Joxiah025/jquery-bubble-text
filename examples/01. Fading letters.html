@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jqueryBubbleText - Fading letters</title>
+    <style type="text/css">
+    #bubble {
+        width: 400px;
+        height: 300px;
+        font-size: 15px;
+        font-family: Verdana;
+        color: rgb(36, 157, 127);
+        border: 1px dotted #000;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="bubble"></div>
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="../jquery-bubble-text.js"></script>
+<script>
+$(document).ready(function() {
+
+    var $element = $('#bubble');
+    var newText = 'In this example, bubbleText takes the inner html of $element (initially empty), and animates it into this new text. The effect is the phrase being displayed letter by letter, in place.';
+
+    bubbleText({
+        element: $element,
+        newText: newText,
+        speed: 5000,
+    });
+
+});
+</script>
