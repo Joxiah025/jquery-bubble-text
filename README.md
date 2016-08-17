@@ -16,8 +16,10 @@ Below you can see use cases:
     bubbleText({
         element: $element,        // mandatory, must be one DOM leaf node
         newText: 'new Text',      // mandatory, must be one string
-        speed: 5000,              // optional, default: 2000
-        callback: function(){}    // optional
+        speed: 3000,              // optional, default: 2000
+        letterSpeed: 70,          // optional, when declared has priority over "speed"
+        callback: function(){},   // optional, an asynchronous task to do on finish
+        proportional: true,       // optional, default: false, issue enhancement #4
     });
 
 ---

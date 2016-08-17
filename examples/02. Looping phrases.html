@@ -39,8 +39,11 @@ $(document).ready(function() {
         bubbleText({
             element: $element,
             newText: phrases[index],
-            speed: 3000,
-            callback: () => setTimeout(loopAnimation, 1000)
+            letterSpeed: 70,
+            callback: function() {
+                setTimeout(loopAnimation, 1000)
+            },
+            proportional: true,
         });
 
     })();

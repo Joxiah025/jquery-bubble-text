@@ -1,11 +1,4 @@
-// bubbleText({
-//     element: $element,        -- mandatory, must be one DOM leaf node
-//     newText: 'new Text',      -- mandatory, must be one string
-//     speed: 5000,              -- optional, default: 2000
-//     callback: function(){}    -- optional
-// })
-
-function bubbleText(o) {
+(window || this).bubbleText = function(o) {
 
     // check if is an object
     if (o !== Object(o) || o.map === [].map) {
@@ -77,17 +70,45 @@ function bubbleText(o) {
         animations.push(step);
     };
     var indexRemotion = 0;
-    while (oldSpans.length) {
-        var step = {
-            remove: oldSpans.shift(),
-        };
-        if (indexRemotion < animations.length) {
-            animations.splice(indexRemotion, 0, step);
-            indexRemotion += 2;
+    if (o.proportional) {
+        var xRemotions = oldSpans.length;
+        var yAdditions = animations.length;
+        if (xRemotions > yAdditions) {
+            xRemotions = Math.ceil(xRemotions / yAdditions);
+            yAdditions = 1;
         } else {
-            animations.push(step);
+            yAdditions = Math.ceil(yAdditions / xRemotions);
+            xRemotions = 1;
         }
-    };
+        while (oldSpans.length) {
+            if (indexRemotion < animations.length) {
+                var remotionsStep = oldSpans.splice(0, xRemotions);
+                while (remotionsStep.length) {
+                    animations.splice(indexRemotion, 0, {
+                        remove: remotionsStep.shift(),
+                    });
+                    indexRemotion++;
+                }
+                indexRemotion += yAdditions;
+            } else {
+                animations.push({
+                    remove: oldSpans.shift(),
+                });
+            }
+        };
+    } else {
+        while (oldSpans.length) {
+            var step = {
+                remove: oldSpans.shift(),
+            };
+            if (indexRemotion < animations.length) {
+                animations.splice(indexRemotion, 0, step);
+                indexRemotion += 2;
+            } else {
+                animations.push(step);
+            }
+        };
+    }
 
     // force spans to be aligned as normal text
     var spans = $element.find('span');
@@ -102,7 +123,7 @@ function bubbleText(o) {
     });
 
     // animation global properties
-    var speed = Math.floor((o.speed || 2000) / animations.length);
+    var letterSpeed = parseInt(o.letterSpeed) || Math.floor((o.speed || 2000) / animations.length);
     var boundaries = ['&nbsp;', '.', ','];
 
     // start animations
@@ -121,7 +142,7 @@ function bubbleText(o) {
         // animation properties
         var nextAnimation = function() { bubble(position + 1); };
         var objAnimate = {
-            duration: speed,
+            duration: letterSpeed,
             complete: nextAnimation,
             easing: 'linear',
         };
@@ -159,7 +180,7 @@ function bubbleText(o) {
             step.remove.html.animate({
                 width: 0,
             }, step.add ? {
-                duration: speed,
+                duration: letterSpeed,
                 easing: 'linear',
             } : objAnimate);
         }
