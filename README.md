@@ -5,7 +5,7 @@ This plugin introduces one animated way of changing text.
 Below you can see use cases:
 
 1. Fading letters. [(Example)](https://jsfiddle.net/5c5bkkgu/1/)
-2. Looping phrases. [(Example)](https://jsfiddle.net/amf6ktpy/7/)
+2. Looping phrases. [(Example)](https://jsfiddle.net/amf6ktpy/8/)
 
 <sup>Thanks [_jsfiddle.net_](https://jsfiddle.net/)</sup>
 
