@@ -13,13 +13,14 @@ Below you can see use cases:
 
 ### Syntax
 
-    bubbleText({
-        element: $element,        // mandatory, must be one DOM leaf node
-        newText: 'new Text',      // mandatory, must be one string
-        speed: 3000,              // optional, default: 2000
-        letterSpeed: 70,          // optional, when declared has priority over "speed"
-        callback: function(){},   // optional, an asynchronous task to do on finish
-        proportional: true,       // optional, default: false, issue enhancement #4
+    bubbleText({                // mandatory:
+        element: $element,      //   must be one DOM leaf node
+        newText: 'new Text',    //   must be one string
+                                // optional:
+        speed: 3000,            //   default: 2000
+        letterSpeed: 70,        //   when declared has priority over "speed"
+        callback: function(){}, //   an asynchronous task to do on finish
+        proportional: true,     //   default: false, when true: additions and remotion will end together (#4)
     });
 
 ---
