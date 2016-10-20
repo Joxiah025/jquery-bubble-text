@@ -1,28 +1,8 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>jqueryBubbleText - Looping phrases</title>
-    <style type="text/css">
-    #bubble {
-        font-size: 25px;
-        font-family: Comic Sans MS, Verdana, monospace;
-        color: #2d509b;
-        font-weight: bold;
-    }
-    </style>
-</head>
-
-<body>
-    <div id="bubble">Hello, World!</div>
-</body>
-
-</html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="../jquery-bubble-text.js"></script>
-<script>
 $(document).ready(function() {
+
     var $element = $('#bubble');
+
+    var index = -1;
     var phrases = [
         'This is how bubbleText works.',
         'Animating each letter in a friendly way',
@@ -31,7 +11,7 @@ $(document).ready(function() {
         'Regards,',
         'Guedes, Washington L.',
     ];
-    var index = -1;
+
 
     (function loopAnimation() {
         index = (index + 1) % phrases.length;
@@ -48,5 +28,5 @@ $(document).ready(function() {
 
     })();
 
+
 });
-</script>

@@ -112,12 +112,13 @@
 
     // force spans to be aligned as normal text
     var spans = $element.find('span');
-    var spanHeight = $(spans[0]).height(); // test
+    var lineHeight = $element.css('line-height');
+    var spanHeight = /\d/.test(lineHeight) ? lineHeight : ($(spans[0]).height() + 'px');
     spans.each(function() {
         $(this).css({
             position: 'relative',
-            display: 'inline-block',
-            height: spanHeight + 'px',
+            float: 'left',
+            height: spanHeight,
             overflow: 'hidden',
         });
     });
@@ -135,6 +136,12 @@
             dom.innerHTML = newText;
             if (typeof o.callback === 'function') {
                 o.callback();
+            }
+            if (o.repeat--) {
+                setTimeout(function() {
+                    dom.innerHTML = oldText;
+                    bubbleText(o);
+                }, o.timeBetweenRepeat || 1500);
             }
             return;
         }
