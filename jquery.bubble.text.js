@@ -70,6 +70,7 @@
         animations.push(step);
     };
     var indexRemotion = 0;
+    o.hasOwnProperty('proportional') || (o.proportional = true);
     if (o.proportional) {
         var xRemotions = oldSpans.length;
         var yAdditions = animations.length;

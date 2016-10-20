@@ -21,9 +21,8 @@ $(document).ready(function() {
             newText: phrases[index],
             letterSpeed: 70,
             callback: function() {
-                setTimeout(loopAnimation, 1000)
+                setTimeout(loopAnimation, 1000);
             },
-            proportional: true,
         });
 
     })();
