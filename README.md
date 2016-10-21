@@ -54,6 +54,7 @@ The animation is proportional by default, if the initial text is `"abcd"` and th
 5. remove `"d"`, 
 6. add `"f"`. 
 
+But some may prefer steps of 1 remotion and 1 addition independent of the total number of additions and remotions, for that purpose you can set the `proportional` property to `false`:
 
 ```JavaScript
 properties.proportional = false;
