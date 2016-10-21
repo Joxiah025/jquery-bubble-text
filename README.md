@@ -1,8 +1,8 @@
 # jquery-bubble-text
 This plugin introduces one animated way of changing text.
 
-- [Getting started](#Getting started)
-- [Examples](#Examples)
+- [Getting started](#getting-started)
+- [Examples](#examples)
 
 # Getting started
 
