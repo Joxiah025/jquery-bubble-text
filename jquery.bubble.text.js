@@ -127,6 +127,7 @@
     // animation global properties
     var letterSpeed = parseInt(o.letterSpeed) || Math.floor((o.speed || 2000) / animations.length);
     var boundaries = ['&nbsp;', '.', ','];
+    var breakLine = '<br clear="all">';
 
     // start animations
     (function bubble(position) {
@@ -163,17 +164,23 @@
                     var previousTop = prev.offset().top;
                     var thisTop = step.add.html.offset().top;
 
-                    // if need to break line
+                    // if span needs to be in another line
                     if (thisTop !== previousTop) {
 
-                        // find previous boundary span to display block
-                        while (boundaries.indexOf(prev.html()) === -1) {
-                            prev = prev.prev('span');
-                            if (prev.length === 0) {
-                                break;
+                        // if needs to find the previous boundary
+                        if (step.add.html.html() !== '&nbsp;') {
+
+                            while (boundaries.indexOf(prev.html()) === -1) {
+                                prev = prev.prev('span');
+                                if (prev.length === 0) {
+                                    break;
+                                }
                             }
+                            prev.after(breakLine);
+
+                        } else {
+                            step.add.html.replaceWith(breakLine);
                         }
-                        prev.after('<br>');
                     }
                 }
                 nextAnimation();
