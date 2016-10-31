@@ -30,8 +30,15 @@
         return;
     }
 
-    // empty $element
+    // empty $element and calc spaceWidth
     var oldText = dom.innerHTML;
+    var spanCSS = {
+        position: 'relative',
+        float: 'left',
+        overflow: 'hidden',
+    };
+    var spaceWidth = $('<span>. .</span>').appendTo($element).css(spanCSS);
+    spaceWidth = spaceWidth.width() - spaceWidth.html('.').width() * 2;
     dom.innerHTML = '';
 
     // map spans
@@ -39,12 +46,14 @@
         var array = [];
         for (var i = 0, l = string.length; i < l; i++) {
             var char = string.charAt(i);
-            char = char === ' ' ? '&nbsp;' : char;
             array[i] = {
                 char: char,
                 html: $('<span class="span-bubble-text">' + char + '</span>')
                     .appendTo($element),
             };
+            if (char === ' ') {
+                array[i].html.width(spaceWidth);
+            }
         }
         return array;
     };
@@ -57,7 +66,7 @@
         var add = newSpans.shift();
         var step = {
             add: add,
-            width: add.html.width() + 'px', // test
+            width: add.html.width() + 'px',
         };
         add.html.width(0);
         var char = add.char;
@@ -114,19 +123,12 @@
     // force spans to be aligned as normal text
     var spans = $element.find('span');
     var lineHeight = $element.css('line-height');
-    var spanHeight = /\d/.test(lineHeight) ? lineHeight : ($(spans[0]).height() + 'px');
-    spans.each(function() {
-        $(this).css({
-            position: 'relative',
-            float: 'left',
-            height: spanHeight,
-            overflow: 'hidden',
-        });
-    });
+    spanCSS.height = /\d/.test(lineHeight) ? lineHeight : ($(spans[0]).height() + 'px');
+    spans.css(spanCSS);
 
     // animation global properties
     var letterSpeed = parseInt(o.letterSpeed) || Math.floor((o.speed || 2000) / animations.length);
-    var boundaries = ['&nbsp;', '.', ','];
+    var boundaries = [' ', '.', ',', '-'];
     var breakLine = '<br clear="all">';
 
     // start animations
@@ -158,18 +160,24 @@
 
         // animate span letter in
         if (step.add) {
+            var $span = step.add.html;
             objAnimate.complete = function() {
-                var prev = step.add.html.prev('span');
+                var isSpace = $span.html() === ' ';
+                if (!isSpace) {
+                    $span.css('width', 'auto');
+                }
+                var prev = $span.prev('span');
                 if (prev.length) {
-                    var previousTop = prev.offset().top;
-                    var thisTop = step.add.html.offset().top;
+                    var isNewLine = prev.offset().top !== $span.offset().top;
 
-                    // if span needs to be in another line
-                    if (thisTop !== previousTop) {
+                    // (TODO: MORE TESTS)
+                    if (isNewLine) {
+                        if (isSpace) {
+                            $span.replaceWith(breakLine);
 
-                        // if needs to find the previous boundary
-                        if (step.add.html.html() !== '&nbsp;') {
+                        } else {
 
+                            // find the previous boundary
                             while (boundaries.indexOf(prev.html()) === -1) {
                                 prev = prev.prev('span');
                                 if (prev.length === 0) {
@@ -177,15 +185,12 @@
                                 }
                             }
                             prev.after(breakLine);
-
-                        } else {
-                            step.add.html.replaceWith(breakLine);
                         }
                     }
                 }
                 nextAnimation();
             };
-            step.add.html.animate({
+            $span.animate({
                 width: step.width,
             }, objAnimate);
         }
