@@ -1,13 +1,13 @@
-(window || this).bubbleText = function(o) {
+(window || this).bubbleText = function(ctrl) {
 
     // check if is an object
-    if (o !== Object(o) || o.map === [].map) {
+    if (ctrl !== Object(ctrl) || ctrl.map === [].map) {
         throw 'bubbleText: Missing properties';
         return;
     }
 
     // get element
-    var $element = $(o.element);
+    var $element = $(ctrl.element);
     var dom = $element[0];
 
     // check if has element
@@ -24,7 +24,7 @@
     }
 
     // check if has newText
-    var newText = o.newText;
+    var newText = ctrl.newText;
     if (typeof newText !== 'string') {
         throw 'bubbleText: Missing newText';
         return;
@@ -79,8 +79,8 @@
         animations.push(step);
     };
     var indexRemotion = 0;
-    o.hasOwnProperty('proportional') || (o.proportional = true);
-    if (o.proportional) {
+    ctrl.hasOwnProperty('proportional') || (ctrl.proportional = true);
+    if (ctrl.proportional) {
         var xRemotions = oldSpans.length;
         var yAdditions = animations.length;
         if (xRemotions > yAdditions) {
@@ -127,9 +127,30 @@
     spans.css(spanCSS);
 
     // animation global properties
-    var letterSpeed = parseInt(o.letterSpeed) || Math.floor((o.speed || 2000) / animations.length);
+    var letterSpeed = parseInt(ctrl.letterSpeed) || Math.floor((ctrl.speed || 2000) / animations.length);
     var boundaries = [' ', '.', ',', '-'];
     var breakLine = '<br clear="all">';
+
+    // enable user to stop aniamtion
+    ctrl.stop = function() {
+        $element.find('span').stop();
+    };
+
+    // enable user to finish animation
+    ctrl.finish = function(runCallback) {
+        ctrl.stop();
+        dom.innerHTML = newText;
+        if (runCallback && typeof ctrl.callback === 'function') {
+            ctrl.callback();
+        }
+    };
+
+    // enable user to restart animation
+    ctrl.restart = function() {
+        ctrl.stop();
+        dom.innerHTML = oldText;
+        $.extend(ctrl, bubbleText(ctrl));
+    };
 
     // start animations
     (function bubble(position) {
@@ -137,21 +158,17 @@
 
         // if animations ended
         if (!step) {
-            dom.innerHTML = newText;
-            if (typeof o.callback === 'function') {
-                o.callback();
-            }
-            if (o.repeat--) {
-                setTimeout(function() {
-                    dom.innerHTML = oldText;
-                    bubbleText(o);
-                }, o.timeBetweenRepeat || 1500);
+            ctrl.finish(true);
+            if (ctrl.repeat--) {
+                setTimeout(ctrl.restart, ctrl.timeBetweenRepeat || 1500);
             }
             return;
         }
 
         // animation properties
-        var nextAnimation = function() { bubble(position + 1); };
+        var nextAnimation = function() {
+            bubble(position + 1);
+        };
         var objAnimate = {
             duration: letterSpeed,
             complete: nextAnimation,
@@ -206,4 +223,6 @@
         }
     })(0);
 
+    // return instance to the user
+    return ctrl;
 };
